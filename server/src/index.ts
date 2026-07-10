@@ -1,4 +1,6 @@
-import { createServer } from "http";
+import { createServer, type IncomingMessage, type ServerResponse } from "http";
+import { createReadStream, existsSync, statSync } from "fs";
+import { extname, join, normalize } from "path";
 import { Server, Socket } from "socket.io";
 
 import { lists } from "./assets/mock-data";
@@ -13,9 +15,44 @@ import {
 import { createReorderServiceProxy } from "./services/reorder.proxy";
 import { HistoryService } from "./services/history.service";
 
-const PORT = 3006;
+const PORT = Number(process.env.PORT) || 3006;
+const CLIENT_DIST = join(__dirname, "../../client/dist");
 
-const httpServer = createServer();
+const contentTypes: Record<string, string> = {
+  ".css": "text/css",
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".svg": "image/svg+xml",
+};
+
+const serveClient = (
+  request: IncomingMessage,
+  response: ServerResponse
+): void => {
+  const requestPath = normalize(
+    decodeURIComponent(request.url?.split("?")[0] ?? "/")
+  )
+    .replace(/^(\.\.[/\\])+/, "")
+    .replace(/^[/\\]+/, "");
+  const requestedFile = join(CLIENT_DIST, requestPath);
+  const filePath =
+    requestPath && existsSync(requestedFile) && statSync(requestedFile).isFile()
+      ? requestedFile
+      : join(CLIENT_DIST, "index.html");
+
+  if (!existsSync(filePath)) {
+    response.writeHead(404).end("Client build not found");
+    return;
+  }
+
+  response.setHeader(
+    "Content-Type",
+    contentTypes[extname(filePath)] ?? "application/octet-stream"
+  );
+  createReadStream(filePath).pipe(response);
+};
+
+const httpServer = createServer(serveClient);
 const io = new Server(httpServer, {
   cors: {
     origin: "*",
@@ -30,7 +67,7 @@ logger.subscribe(new ConsoleErrorSubscriber());
 const reorderService = createReorderServiceProxy(new ReorderService(), logger);
 const history = new HistoryService();
 
-if (process.env.NODE_ENV !== "production") {
+if (db.getData().length === 0) {
   db.setData(lists);
 }
 

@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "description": "Starter for Patterns Practises and Principles homework. Binary Studio Academy",
   "scripts": {
-    "build": "npm run build -w client && tsc --noEmit -p server/tsconfig.json",
+    "start": "node server/dist/index.js",
+    "build": "npm run build -w client && tsc -p server/tsconfig.json",
     "lint": "eslint client/src server/src",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -16,7 +17,7 @@
   ],
   "engines": {
     "node": ">=18 <23",
-    "npm": ">=10 <11"
+    "npm": ">=10 <12"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -26,8 +27,5 @@
     "prettier": "^3.9.5",
     "typescript": "5.6.3",
     "typescript-eslint": "^8.63.0"
-  },
-  "dependencies": {
-    "22": "^0.0.0"
   }
 }
