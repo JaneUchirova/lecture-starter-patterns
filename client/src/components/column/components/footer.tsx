@@ -1,5 +1,5 @@
-import { CreatorInput } from 'src/components/primitives/creator-input';
-import { FooterContainer } from '../styled/footer-container';
+import { CreatorInput } from "src/components/primitives/creator-input";
+import { FooterContainer } from "../styled/footer-container";
 
 type Props = {
   onCreateCard: (name: string) => void;

@@ -5,6 +5,9 @@ import type {
 import { Draggable } from "@hello-pangea/dnd";
 
 import { type Card } from "src/common/types/types";
+import { CardEvent, ListEvent } from "src/common/enums/enums";
+import { SocketContext } from "src/context/socket";
+import { useContext } from "react";
 import { CardsList } from "../card-list/card-list";
 import { DeleteButton } from "../primitives/delete-button";
 import { Splitter } from "../primitives/styled/splitter";
@@ -21,6 +24,8 @@ type Props = {
 };
 
 export const Column = ({ listId, listName, cards, index }: Props) => {
+  const socket = useContext(SocketContext);
+
   return (
     <Draggable draggableId={listId} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
@@ -37,16 +42,23 @@ export const Column = ({ listId, listName, cards, index }: Props) => {
             <Title
               aria-label={listName}
               title={listName}
-              onChange={() => {}}
+              onChange={(name) => socket.emit(ListEvent.RENAME, listId, name)}
               fontSize="large"
               width={200}
               isBold
             />
             <Splitter />
-            <DeleteButton color="#FFF0" onClick={() => {}} />
+            <DeleteButton
+              color="#FFF0"
+              onClick={() => socket.emit(ListEvent.DELETE, listId)}
+            />
           </Header>
           <CardsList listId={listId} listType="CARD" cards={cards} />
-          <Footer onCreateCard={() => {}} />
+          <Footer
+            onCreateCard={(name) =>
+              name.trim() && socket.emit(CardEvent.CREATE, listId, name.trim())
+            }
+          />
         </Container>
       )}
     </Draggable>

@@ -1,6 +1,9 @@
 import type { DraggableProvided } from "@hello-pangea/dnd";
 
 import { type Card } from "src/common/types/types";
+import { CardEvent } from "src/common/enums/enums";
+import { SocketContext } from "src/context/socket";
+import { useContext } from "react";
 import { CopyButton } from "../primitives/copy-button";
 import { DeleteButton } from "../primitives/delete-button";
 import { Splitter } from "../primitives/styled/splitter";
@@ -11,12 +14,15 @@ import { Content } from "./styled/content";
 import { Footer } from "./styled/footer";
 
 type Props = {
+  listId: string;
   card: Card;
   isDragging: boolean;
   provided: DraggableProvided;
 };
 
-export const CardItem = ({ card, isDragging, provided }: Props) => {
+export const CardItem = ({ listId, card, isDragging, provided }: Props) => {
+  const socket = useContext(SocketContext);
+
   return (
     <Container
       className="card-container"
@@ -29,12 +35,33 @@ export const CardItem = ({ card, isDragging, provided }: Props) => {
       aria-label={card.name}
     >
       <Content>
-        <Title onChange={() => {}} title={card.name} fontSize="large" isBold />
-        <Text text={card.description} onChange={() => {}} />
+        <Title
+          onChange={(name) =>
+            socket.emit(CardEvent.RENAME, listId, card.id, name)
+          }
+          title={card.name}
+          fontSize="large"
+          isBold
+        />
+        <Text
+          text={card.description}
+          onChange={(description) =>
+            socket.emit(
+              CardEvent.CHANGE_DESCRIPTION,
+              listId,
+              card.id,
+              description
+            )
+          }
+        />
         <Footer>
-          <DeleteButton onClick={() => {}} />
+          <DeleteButton
+            onClick={() => socket.emit(CardEvent.DELETE, listId, card.id)}
+          />
           <Splitter />
-          <CopyButton onClick={() => {}} />
+          <CopyButton
+            onClick={() => socket.emit(CardEvent.DUPLICATE, listId, card.id)}
+          />
         </Footer>
       </Content>
     </Container>

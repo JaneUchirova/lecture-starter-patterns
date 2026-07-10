@@ -5,15 +5,16 @@ import { DropZone } from "../styled/drop-zone";
 import { Cards } from "./cards";
 
 type Props = {
+  listId: string;
   dropProvided: DroppableProvided;
   cards: Card[];
 };
 
-const List = ({ cards, dropProvided }: Props) => {
+const List = ({ listId, cards, dropProvided }: Props) => {
   return (
     <div className="list-container">
       <DropZone ref={dropProvided.innerRef}>
-        <Cards cards={cards} />
+        <Cards listId={listId} cards={cards} />
         {dropProvided.placeholder}
       </DropZone>
     </div>

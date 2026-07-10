@@ -1,6 +1,6 @@
-import { randomUUID } from 'crypto';
+import { randomUUID } from "crypto";
 
-import { Card } from './card';
+import { Card } from "./card";
 
 class List {
   public id: string;

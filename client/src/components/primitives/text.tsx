@@ -1,9 +1,9 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from "react";
 
-import { useComponentVisible } from 'src/hooks/useComponentVisible';
-import { BasicText } from './styled/basic-text';
-import { TextContainer } from './styled/text-container';
-import { TextInput } from './styled/text-input';
+import { useComponentVisible } from "src/hooks/useComponentVisible";
+import { BasicText } from "./styled/basic-text";
+import { TextContainer } from "./styled/text-container";
+import { TextInput } from "./styled/text-input";
 
 type Props = {
   text: string;
@@ -19,7 +19,11 @@ export const Text = ({ onChange, text }: Props) => {
 
   const onEdit = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
-    onChange(e.target.value);
+  };
+
+  const finishEditing = () => {
+    setIsComponentVisible(false);
+    if (value !== text) onChange(value);
   };
 
   return (
@@ -29,7 +33,7 @@ export const Text = ({ onChange, text }: Props) => {
           className="text-input"
           value={value}
           onChange={onEdit}
-          onBlur={() => setIsComponentVisible(false)}
+          onBlur={finishEditing}
           autoFocus={isComponentVisible}
         />
       ) : (

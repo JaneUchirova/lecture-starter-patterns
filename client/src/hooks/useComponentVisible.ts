@@ -1,5 +1,5 @@
-import type { Dispatch, RefObject, SetStateAction } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import type { Dispatch, RefObject, SetStateAction } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function useComponentVisible(initialIsVisible = false): {
   ref: RefObject<HTMLDivElement>;
@@ -11,7 +11,7 @@ export function useComponentVisible(initialIsVisible = false): {
   const ref = useRef<HTMLDivElement>(null!);
 
   const handleHideDropdown = (event: KeyboardEvent): void => {
-    if (event.key === 'Escape') {
+    if (event.key === "Escape") {
       setIsComponentVisible(false);
     }
   };
@@ -23,12 +23,12 @@ export function useComponentVisible(initialIsVisible = false): {
   };
 
   useEffect(() => {
-    document.addEventListener('keydown', handleHideDropdown, true);
-    document.addEventListener('click', handleClickOutside, true);
+    document.addEventListener("keydown", handleHideDropdown, true);
+    document.addEventListener("click", handleClickOutside, true);
 
     return () => {
-      document.removeEventListener('keydown', handleHideDropdown, true);
-      document.removeEventListener('click', handleClickOutside, true);
+      document.removeEventListener("keydown", handleHideDropdown, true);
+      document.removeEventListener("click", handleClickOutside, true);
     };
   });
 

@@ -1,14 +1,17 @@
-import { Card } from '../data/models/card';
-import { List } from '../data/models/list';
+import { Card } from "../data/models/card";
+import { List } from "../data/models/list";
 
 const toDo = new List("Backlog");
-toDo.cards = [  new Card(
+toDo.cards = [
+  new Card(
     "Implement list renaming functionality",
     "Expected result - ability to modify the list name"
-  ),  new Card(
+  ),
+  new Card(
     "Implement card creation feature",
     "Expected result - ability to add new cards to lists"
-  ),  new Card(
+  ),
+  new Card(
     "Implement card deletion functionality",
     "Expected result - ability to remove cards when delete button is pressed"
   ),
@@ -19,7 +22,8 @@ toDo.cards = [  new Card(
   new Card(
     "Implement card description renaming",
     "Expected result - possibility to change the card description"
-  ),  new Card(
+  ),
+  new Card(
     "Implement task duplication feature",
     'Expected result - ability to duplicate cards. Should be implemented using Prototype pattern. New ID should be generated for copied card. The card name should include "duplicate" suffix'
   ),

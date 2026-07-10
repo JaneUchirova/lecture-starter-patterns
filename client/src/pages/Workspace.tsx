@@ -11,7 +11,7 @@ import { type List } from "src/common/types/types";
 import { Column } from "src/components/column/column";
 import { ColumnCreator } from "src/components/column-creator/column-creator";
 import { SocketContext } from "src/context/socket";
-import { reorderService } from "src/services/reorder.service";
+import { reorderCards, reorderLists } from "src/services/reorder.service";
 import { Container } from "./styled/container";
 
 export const Workspace = () => {
@@ -27,6 +27,21 @@ export const Workspace = () => {
       socket.removeAllListeners(ListEvent.UPDATE);
     };
   }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!event.ctrlKey) return;
+
+      const key = event.key.toLowerCase();
+      if (key === "z" || key === "y") {
+        event.preventDefault();
+        socket.emit(key === "z" ? ListEvent.UNDO : ListEvent.REDO);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [socket]);
 
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
@@ -47,15 +62,13 @@ export const Workspace = () => {
     const isReorderLists = result.type === "COLUMN";
 
     if (isReorderLists) {
-      setLists(
-        reorderService.reorderLists(lists, source.index, destination.index)
-      );
+      setLists(reorderLists(lists, source.index, destination.index));
       socket.emit(ListEvent.REORDER, source.index, destination.index);
 
       return;
     }
 
-    setLists(reorderService.reorderCards(lists, source, destination));
+    setLists(reorderCards(lists, source, destination));
     socket.emit(CardEvent.REORDER, {
       sourceListId: source.droppableId,
       destinationListId: destination.droppableId,
@@ -84,7 +97,11 @@ export const Workspace = () => {
                 />
               ))}
               {provided.placeholder}
-              <ColumnCreator onCreateList={() => {}} />
+              <ColumnCreator
+                onCreateList={(name) =>
+                  name.trim() && socket.emit(ListEvent.CREATE, name.trim())
+                }
+              />
             </Container>
           )}
         </Droppable>

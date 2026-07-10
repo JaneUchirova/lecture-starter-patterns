@@ -1,5 +1,5 @@
-import { socket, SocketContext } from './context/socket';
-import { Workspace } from './pages/Workspace';
+import { socket, SocketContext } from "./context/socket";
+import { Workspace } from "./pages/Workspace";
 
 function App() {
   return (

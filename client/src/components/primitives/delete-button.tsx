@@ -1,7 +1,7 @@
-import { useTheme } from '@emotion/react';
+import { useTheme } from "@emotion/react";
 
-import { Icon } from '../icon/icon';
-import { Button } from './styled/button';
+import { Icon } from "../icon/icon";
+import { Button } from "./styled/button";
 
 type Props = {
   onClick: () => void;
@@ -10,7 +10,7 @@ type Props = {
 
 const DeleteButton = ({ onClick, color }: Props) => {
   const theme = useTheme();
-  
+
   return (
     <Button
       className="delete-btn"

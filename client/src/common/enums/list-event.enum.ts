@@ -5,6 +5,8 @@ const ListEvent = {
   UPDATE: "list:update",
   RENAME: "list:rename",
   DELETE: "list:delete",
+  UNDO: "history:undo",
+  REDO: "history:redo",
 } as const;
 
 export { ListEvent };

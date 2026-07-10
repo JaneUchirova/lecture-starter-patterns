@@ -1,4 +1,4 @@
-import { Card } from './card.type';
+import { Card } from "./card.type";
 
 type List = {
   id: string;

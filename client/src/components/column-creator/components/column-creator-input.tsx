@@ -1,5 +1,5 @@
-import { CreatorInput } from 'src/components/primitives/creator-input';
-import { ColumnCreatorContainer } from '../styled/column-creator-container';
+import { CreatorInput } from "src/components/primitives/creator-input";
+import { ColumnCreatorContainer } from "../styled/column-creator-container";
 
 type Props = {
   onCreateList: (name: string) => void;
@@ -7,7 +7,7 @@ type Props = {
 
 export const ColumnCreatorInput = ({ onCreateList }: Props) => {
   return (
-    <ColumnCreatorContainer className='column-creator-container'>
+    <ColumnCreatorContainer className="column-creator-container">
       <CreatorInput onSubmit={onCreateList} />
     </ColumnCreatorContainer>
   );
